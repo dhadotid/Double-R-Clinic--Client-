@@ -7,11 +7,15 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
@@ -52,15 +56,19 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Error 1 :"+ e);
         }
         
+        tableModel = (DefaultTableModel)tbDrugRecipe.getModel();
+        tableModel.setRowCount(0);
         autoidrecipedetail();
         tableload();
         tableRecipe();
+        oncloseClicked();
         txtQty.requestFocus();
         txtIdRecipeDetail.setEnabled(false);
         txtIdDrug.setEnabled(false);
         txtIdRecipe.setEnabled(false);
-        txtQty.setText("1");
+        txtQty.setText("0");
         txtSub.setEnabled(false);
+        btnSave.setEnabled(false);
     }
 
     /**
@@ -205,15 +213,20 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
 
         tbDrugRecipe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Id Recipe Detail", "Id Recipe", "DrugName", "Qty", "Dose", "Subtotal"
+                "Id Recipe", "Id Drug", "Qty", "Dose", "Subtotal"
             }
         ));
+        tbDrugRecipe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbDrugRecipeMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tbDrugRecipe);
 
         tbRecipe.setModel(new javax.swing.table.DefaultTableModel(
@@ -417,21 +430,21 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Data recipe detail has been full");
             }else{
                 try {
-                    inRecipe.setRecipeDetID(txtIdRecipeDetail.getText());
-                    inRecipe.setRecipeID(txtIdRecipe.getText());
-                    inRecipe.setDrugID(txtIdDrug.getText());
-                    inRecipe.setQTY(Integer.parseInt(txtQty.getText()));
-                    inRecipe.setDose(txtDose.getText());
-                    int i = inRecipe.doInsert();
-                    if(i != 0){
-                        JOptionPane.showMessageDialog(null, "Data recipe detail successful inputted");
-
-                        clear();
-                        tableload();
-                        tableRecipe();
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Data recipe detail failed inputted");
-                    }
+                    String recipeID = txtIdRecipe.getText();
+                    String drugID = txtIdDrug.getText();
+                    String qty = txtQty.getText();
+                    String dose = txtDose.getText();
+                    String subTotal = txtSub.getText();
+                    
+                    Object[] row = {recipeID, drugID, qty, dose, subTotal};
+                    tableModel = (DefaultTableModel)tbDrugRecipe.getModel();
+                    tableModel.addRow(row);
+                    int jmlhbaris = tbDrugRecipe.getRowCount();
+                    
+                    btnSave.setEnabled(true);
+                    clear();
+                    tableload();
+                    tableRecipe();
                 } catch (Exception e) {
                     System.out.println("Error: " + e);
                 }
@@ -480,9 +493,110 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
         txtIdRecipe.setText(model.getValueAt(selectedRowIndex, 0).toString());
     }//GEN-LAST:event_tbRecipeMouseClicked
 
+    private void oncloseClicked(){
+        this.setDefaultCloseOperation(JFUserRecipeDetail.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String objButton[] = {"Yes","No"};
+                int jmlhrow = tbDrugRecipe.getRowCount();
+                if(jmlhrow > 0){
+                    int PromptResult = JOptionPane.showOptionDialog(null, "Are you sure want to back?\nYou are not save this record yet!","Double R Clinic", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, objButton, objButton[1]);
+                    if (PromptResult == JOptionPane.YES_OPTION) {
+                        dispose();
+                    }
+                }else{
+                    dispose();
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                
+            }
+        });
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
+        try {
+            int jmlhbaris = tbDrugRecipe.getRowCount();
+            String idRecipe = null;
+            String idDrug = null;
+            int qty = 0;
+            int y = 0;
+            String dose = null;
+            for(int i = 0; i < jmlhbaris; i++){
+                idRecipe = tbDrugRecipe.getValueAt(i, 0).toString();
+                idDrug = tbDrugRecipe.getValueAt(i, 1).toString();
+                qty = Integer.parseInt(tbDrugRecipe.getValueAt(i, 2).toString());
+                dose = tbDrugRecipe.getValueAt(i, 3).toString();
+                
+                inRecipe.setRecipeID(idRecipe);
+                inRecipe.setDrugID(idDrug);
+                inRecipe.setQTY(qty);
+                inRecipe.setDose(dose);
+                y = inRecipe.doInsert();
+            }
+            if(y != 0){
+                JOptionPane.showMessageDialog(null, "Data recipe detail successful inputted");
+
+                clear();
+                tableload();
+                tableRecipe();
+                JFMainMenu mm = new JFMainMenu();
+                mm.setVisible(true);
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Data recipe detail failed inputted");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(JFUserRecipeDetail.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void tbDrugRecipeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDrugRecipeMouseClicked
+        DefaultTableModel n = (DefaultTableModel) tbDrugRecipe.getModel();
+        try
+        {
+            int row = tbDrugRecipe.getSelectedRow();
+            n.removeRow(row);
+            int jmlbaris = tbDrugRecipe.getRowCount();
+            
+            if(jmlbaris == 0){
+                btnSave.setEnabled(false);
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Please choose item first before click delete options");
+        }
+    }//GEN-LAST:event_tbDrugRecipeMouseClicked
 
     public void clear(){
         txtDose.setText("");

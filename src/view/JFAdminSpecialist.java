@@ -47,8 +47,8 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
         txtIdSpecialist.setEnabled(false);
         btnDelete.setEnabled(false);
         btnUpdate.setEnabled(false);
-        tableload();
         autoid();
+        tableload();
     }
 
     /**

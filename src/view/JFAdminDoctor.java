@@ -674,8 +674,7 @@ public class JFAdminDoctor extends javax.swing.JFrame {
             }
         } catch (Exception ex) {
             System.out.println("Error Disini: " + ex);
-        }
-        
+        }    
     }
     
     public void clearall(){

@@ -506,35 +506,35 @@ public class JFMainMenu extends javax.swing.JFrame {
             JFUserRecipeDetail jfurd = new JFUserRecipeDetail();
             jfurd.setVisible(true);
         }else if(LoginHelper.isAdmin.equals("1")){
-//            JFAdminRecipeDetail ja = new JFAdminRecipeDetail();
-//            ja.setVisible(true);
+            JFUserRecipeDetail jfurd = new JFUserRecipeDetail();
+            jfurd.setVisible(true);
         }
     }//GEN-LAST:event_btnRecipeActionPerformed
 
     private void btnPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentActionPerformed
         //button payment for open window form payment and check the access level login
         if(LoginHelper.isAdmin.equals("0")){
-//            JFUserPayment jfup = new JFUserPayment();
-//            jfup.setVisible(true);
+            JFUserPayment jfup = new JFUserPayment();
+            jfup.setVisible(true);
         }else if(LoginHelper.isAdmin.equals("1")){
-//            JFAdminPayment jap = new JFAdminPayment();
-//            jap.setVisible(true);
+            JFUserPayment jfup = new JFUserPayment();
+            jfup.setVisible(true);
         }
     }//GEN-LAST:event_btnPaymentActionPerformed
 
     private void btnDrugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrugActionPerformed
         // TODO add your handling code here:
         if(LoginHelper.isAdmin.equals("1")){
-//            JFAdminDrug jafd = new JFAdminDrug();
-//            jafd.setVisible(true);
+            JFAdminDrug jafd = new JFAdminDrug();
+            jafd.setVisible(true);
         }
     }//GEN-LAST:event_btnDrugActionPerformed
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
         // TODO add your handling code here:
         if (LoginHelper.isAdmin.equals("1")) {
-//            JFAdminUser jfau = new JFAdminUser();
-//            jfau.setVisible(true);
+            JFAdminUser jfau = new JFAdminUser();
+            jfau.setVisible(true);
         }
     }//GEN-LAST:event_btnUserActionPerformed
 
