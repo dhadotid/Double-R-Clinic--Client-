@@ -97,7 +97,7 @@ public class JFMainMenu extends javax.swing.JFrame {
 
         lblYuhen.setFont(new java.awt.Font("Californian FB", 1, 36)); // NOI18N
         lblYuhen.setForeground(new java.awt.Color(0, 0, 0));
-        lblYuhen.setText("Yuhen");
+        lblYuhen.setText("Double R");
 
         lblClinic.setFont(new java.awt.Font("Californian FB", 1, 48)); // NOI18N
         lblClinic.setForeground(new java.awt.Color(51, 51, 51));
@@ -484,8 +484,8 @@ public class JFMainMenu extends javax.swing.JFrame {
     private void btnSpecialistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpecialistActionPerformed
         //button Specialist for open window form specialist and check the access level login
         if(LoginHelper.isAdmin.equals("1")){
-//            JFAdminSpecialist jafs = new JFAdminSpecialist();
-//            jafs.setVisible(true);
+            JFAdminSpecialist jafs = new JFAdminSpecialist();
+            jafs.setVisible(true);
         }
     }//GEN-LAST:event_btnSpecialistActionPerformed
 
@@ -503,8 +503,8 @@ public class JFMainMenu extends javax.swing.JFrame {
     private void btnRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecipeActionPerformed
         //button recipe for open window form recipe and check the access level login
         if(LoginHelper.isAdmin.equals("0")){
-//            JFUserRecipeDetail jfurd = new JFUserRecipeDetail();
-//            jfurd.setVisible(true);
+            JFUserRecipeDetail jfurd = new JFUserRecipeDetail();
+            jfurd.setVisible(true);
         }else if(LoginHelper.isAdmin.equals("1")){
 //            JFAdminRecipeDetail ja = new JFAdminRecipeDetail();
 //            ja.setVisible(true);

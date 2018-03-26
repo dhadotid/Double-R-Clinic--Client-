@@ -10,26 +10,15 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import net.proteanit.sql.DbUtils;
 import object.InDoctor;
-import object.InLogin;
 
 /**
  *
@@ -38,6 +27,7 @@ import object.InLogin;
 public class JFAdminDoctor extends javax.swing.JFrame {
 
     InDoctor iDoctor;
+    DefaultTableModel tablemodel;
     Calendar now = Calendar.getInstance();
     int yearnow = now.get(Calendar.YEAR);
     int duapuluhthn = yearnow - 20;
@@ -192,10 +182,7 @@ public class JFAdminDoctor extends javax.swing.JFrame {
 
         tblDoctor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Id Doctor", "Id Specialist", "Doctor Name", "Doctor Gender", "Date of Birth", "Phone Number"
@@ -258,10 +245,7 @@ public class JFAdminDoctor extends javax.swing.JFrame {
 
         tblSpecialist.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Id Specialist", "Specialist", "Fare"
@@ -441,9 +425,13 @@ public class JFAdminDoctor extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Data Doctor has been full");
             }else{
                 try {
-                    //ps.setString(3, gender);
-                    //ps.setString(4, dob);
-                    int i = 0;//ps.executeUpdate();
+                    iDoctor.setDoctorID(txtIdDoctor.getText());
+                    iDoctor.setDoctorSPC(txtIdSpecialist.getText());
+                    iDoctor.setDoctorName(txtDoctorName.getText());
+                    iDoctor.setDoctorGender(gender);
+                    iDoctor.setDoctorDOB(dob);
+                    iDoctor.setDoctorPhone(txtPhoneNumber.getText());
+                    int i = iDoctor.doInsert();
                     if(i != 0){
                         JOptionPane.showMessageDialog(null, "Data Doctor successful inputted");
                         
@@ -491,7 +479,7 @@ public class JFAdminDoctor extends javax.swing.JFrame {
         
         txtPhoneNumber.setText(model.getValueAt(selectedRowIndex, 5).toString());
         
-        if (gender == "Male") {
+        if (gender.equals("Male")) {
             //rbMale.isSelected();
             rbMale.setSelected(true);
         }else{
@@ -535,10 +523,14 @@ public class JFAdminDoctor extends javax.swing.JFrame {
                         if(txtIdSpecialist.getText().equals("full")){
                             JOptionPane.showConfirmDialog(null, "Data specialist has been full");
                         }else{
-//                            prs.setString(3, gender);
-//                            prs.setString(4, dob);
-
-                            int i = 0;//prs.executeUpdate();
+                            iDoctor.setDoctorID(txtIdDoctor.getText());
+                            iDoctor.setDoctorSPC(txtIdSpecialist.getText());
+                            iDoctor.setDoctorName(txtDoctorName.getText());
+                            iDoctor.setDoctorGender(gender);
+                            iDoctor.setDoctorDOB(dob);
+                            iDoctor.setDoctorPhone(txtPhoneNumber.getText());
+                            
+                            int i = iDoctor.doUpdate();
                             if(i != 0){
                                 JOptionPane.showMessageDialog(null, "Data Doctor successful updated");
                                 tableload();
@@ -563,7 +555,8 @@ public class JFAdminDoctor extends javax.swing.JFrame {
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure want to Delete?" + txtDoctorName.getText(), "Delete", dialogButton);
         if(dialogResult == JOptionPane.YES_OPTION){
             try {
-                int res = 0;
+                iDoctor.setDoctorID(txtIdDoctor.getText());
+                int res = iDoctor.doDelete();
                 if(res > 0){
                     JOptionPane.showMessageDialog(null, "Success delete data " + txtDoctorName.getText());
                     tableload();
@@ -642,19 +635,45 @@ public class JFAdminDoctor extends javax.swing.JFrame {
     }
 
     public void tableload(){
-        try {
-//            tblDoctor.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex);
+        tablemodel = (DefaultTableModel)tblDoctor.getModel();
+        tablemodel.setRowCount(0);
+        try{
+            ArrayList data = iDoctor.tableDoctor();
+            for(int i = 0;i < data.size()-1;i+=6)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idDoctor = (String)data.get(i);
+                String DoctorSPC = (String)data.get(i+1);
+                String DoctorName = (String)data.get(i+2);
+                String DoctorGender = (String)data.get(i+3);
+                String DOB = (String)data.get(i+4);
+                String DoctorPhone = (String)data.get(i+5);
+
+                String[] data_field = {idDoctor.trim(), DoctorSPC.trim(),DoctorName.trim(), DoctorGender.trim(), DOB.trim(), DoctorPhone.trim()};
+                tablemodel.addRow(data_field);
+            }
         }
-        
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan" + ex.getMessage());
+        }
     }
     
     public void tableloadspecialist(){
+        tablemodel = (DefaultTableModel)tblSpecialist.getModel();
+        tablemodel.setRowCount(0);
         try {
-//            tblSpecialist.setModel(DbUtils.resultSetToTableModel(rs));
+            ArrayList data = iDoctor.tableSpecialist();
+            for(int i = 0;i < data.size()-1;i+=3)
+            {
+                String idSpecialist = (String)data.get(i);
+                String specialist = (String)data.get(i+1);
+                double fare = (double)data.get(i+2);
+
+                String[] data_field = {idSpecialist.trim(), specialist.trim(),fare +""};
+                tablemodel.addRow(data_field);
+            }
         } catch (Exception ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Error Disini: " + ex);
         }
         
     }

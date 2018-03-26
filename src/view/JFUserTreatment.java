@@ -7,21 +7,22 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
-import net.proteanit.sql.DbUtils;
+import javax.swing.table.TableColumn;
+import object.InTreatment;
 
 /**
  *
  * @author dhadotid
  */
 public class JFUserTreatment extends javax.swing.JFrame {
+    InTreatment inTreatment;
+    DefaultTableModel tableModel;
     /**
      * Creates new form JFUserTreatment
      */
@@ -32,14 +33,25 @@ public class JFUserTreatment extends javax.swing.JFrame {
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        try
+        {
+         Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",1097);
+         inTreatment = (InTreatment) myRegistry.lookup("objtreatment");
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null,"Error 1 :"+ e);
+        }
+        
         txtIdDoctor.setEnabled(false);
         txtIdPatient.setEnabled(false);
         txtIdRecipe.setEnabled(false);
         txtIdTreatment.setEnabled(false);
-        tableload();
-        tabledoctor();
         autoid();
         autoidrecipe();
+        tableload();
+        tabledoctor();
         txtDiagnose.requestFocus();
     }
 
@@ -191,13 +203,24 @@ public class JFUserTreatment extends javax.swing.JFrame {
             new String [] {
                 "Id Doctor", "DoctorName", "Specialist", "PhoneNumber"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbDoc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbDocMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tbDoc);
+        if (tbDoc.getColumnModel().getColumnCount() > 0) {
+            tbDoc.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnRefreshDoc.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         btnRefreshDoc.setText("Refresh");
@@ -386,7 +409,10 @@ public class JFUserTreatment extends javax.swing.JFrame {
         }else{
             //Insert
             try {
-                int i = 0;//ps.executeUpdate();
+                inTreatment.setPatientID(txtIdPatient.getText());
+                inTreatment.setDoctorID(txtIdDoctor.getText());
+                inTreatment.setDiagnose(txtDiagnose.getText());
+                int i = inTreatment.doInsert();
                 if(i != 0){
                     JOptionPane.showMessageDialog(null, "Data Treatment successful inputted");
                         
@@ -436,8 +462,20 @@ public class JFUserTreatment extends javax.swing.JFrame {
     }
     
     public void tabledoctor(){
-        try {
-            //tbDoc.setModel(DbUtils.resultSetToTableModel(rs));
+        tableModel = (DefaultTableModel)tbDoc.getModel();
+        tableModel.setRowCount(0);
+        try{
+            ArrayList data = inTreatment.tableDoctor();
+            for(int i = 0;i < data.size()-1;i+=4)
+            {
+                String idDoctor = (String)data.get(i);
+                String DoctorName = (String)data.get(i+1);
+                String DoctorSpecialist = (String)data.get(i+2);
+                String DoctorGender = (String)data.get(i+3);
+
+                String[] data_field = {idDoctor.trim(), DoctorName.trim(),DoctorSpecialist.trim(), DoctorGender.trim()};
+                tableModel.addRow(data_field);
+            }
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
         }
@@ -445,7 +483,8 @@ public class JFUserTreatment extends javax.swing.JFrame {
     
     public void autoid(){
         try {
-            
+            txtIdTreatment.setText(inTreatment.autoid());
+            System.out.println("Test: " + inTreatment.autoid());
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -453,15 +492,35 @@ public class JFUserTreatment extends javax.swing.JFrame {
     
     public void autoidrecipe(){
         try {
-            
+            txtIdRecipe.setText(inTreatment.autoidRecipe());
+            System.out.println("Test: " + inTreatment.autoidRecipe());
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
     }
     
     public void tableload(){
-        try {
-            //tbPatient.setModel(DbUtils.resultSetToTableModel(rs));
+        tableModel = (DefaultTableModel)tbPatient.getModel();
+        tableModel.setRowCount(0);
+        String[] columnNames = {"Id Patient", "Patient Name", "DOB", "Address", "Gender"};
+        for(int i = 0; i < tbPatient.getColumnCount(); i++){
+            TableColumn column1 = tbPatient.getTableHeader().getColumnModel().getColumn(i);
+            column1.setHeaderValue(columnNames[i]);
+        }
+        try{
+            ArrayList data = inTreatment.tablePatient();
+            for(int i = 0;i < data.size()-1;i+=5)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idPatient = (String)data.get(i);
+                String patientName = (String)data.get(i+1);
+                String DOB = (String)data.get(i+2);
+                String patientAddress = (String)data.get(i+3);
+                String patientGender = (String)data.get(i+4);
+                
+                String[] data_field = {idPatient.trim(), patientName.trim(),DOB.trim(), patientAddress.trim(), patientGender.trim()};
+                tableModel.addRow(data_field);
+            }
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
         }

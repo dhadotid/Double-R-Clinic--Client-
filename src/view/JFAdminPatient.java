@@ -8,13 +8,18 @@ package view;
 import helper.LoginHelper;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import object.InPatient;
 
 /**
  *
@@ -22,6 +27,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFAdminPatient extends javax.swing.JFrame {
 
+    InPatient inPatient;
+    DefaultTableModel tableModel;
     String datenow = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
     ButtonGroup bg = new ButtonGroup();
     /**
@@ -36,6 +43,16 @@ public class JFAdminPatient extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         txtPatientName.requestFocus();
         
+        try
+        {
+         Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",1097);
+         inPatient = (InPatient) myRegistry.lookup("objpatient");
+        } 
+        catch (Exception e) 
+        {
+            JOptionPane.showMessageDialog(null,"Error 1 :"+ e);
+        }
+        
         if(!LoginHelper.isAdmin.equals("1")){
             btnUpdate.setVisible(false);
             btnDelete.setVisible(false);
@@ -43,7 +60,7 @@ public class JFAdminPatient extends javax.swing.JFrame {
             btnUpdate.setVisible(true);
             btnDelete.setVisible(true);
         }
-//        autoid();
+        autoid();
         tableload();
         bg.add(rbMale);
         bg.add(rbFemale);
@@ -89,10 +106,7 @@ public class JFAdminPatient extends javax.swing.JFrame {
 
         tblPatient.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "ID Pateient", "Patient Name", "Date of Brith", "Gender", "Address"
@@ -312,13 +326,19 @@ public class JFAdminPatient extends javax.swing.JFrame {
                     }else if(rbFemale.isSelected() == false && rbMale.isSelected() == false){
                         JOptionPane.showMessageDialog(null, "Please select gender");
                     }else{
-                        //update
-                        int i = 0;//prs.executeUpdate();
+                        
+                        inPatient.setPatientID(txtIDP.getText());
+                        inPatient.setPatientName(txtPatientName.getText());
+                        inPatient.setPatientDOB(dob);
+                        inPatient.setPatientAddress(txtAddress.getText());
+                        inPatient.setPatientGender(gender);
+                        
+                        int i = inPatient.doUpdate();
                         if(i != 0){
                             JOptionPane.showMessageDialog(null, "Data Patient successful updated");
                             tableload();
                             clearall();
-//                            autoid();
+                            autoid();
                         }else{
                             JOptionPane.showMessageDialog(null, "Data Patient failed updated");
                         }
@@ -336,13 +356,13 @@ public class JFAdminPatient extends javax.swing.JFrame {
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure want to Delete?" + txtPatientName.getText(), "Delete", dialogButton);
         if(dialogResult == JOptionPane.YES_OPTION){
             try {
-                
-                int res = 0;//ps.executeUpdate();
+                inPatient.setPatientID(txtIDP.getText());
+                int res = inPatient.doDelete();
                 if(res > 0){
                     JOptionPane.showMessageDialog(null, "Success delete data " + txtPatientName.getText());
                     tableload();
                     clearall();
-//                    autoid();
+                    autoid();
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e);
@@ -373,7 +393,6 @@ public class JFAdminPatient extends javax.swing.JFrame {
             }else{
                 String gender = "";
                 if (rbMale.isSelected()) {
-
                     gender = "Male";
                 }else if(rbFemale.isSelected()){
                     gender = "Female";
@@ -381,12 +400,17 @@ public class JFAdminPatient extends javax.swing.JFrame {
                 try {
                     
                     //System.out.println("DOB: " + dob);
+                    inPatient.setPatientID(txtIDP.getText());
+                    inPatient.setPatientName(txtPatientName.getText());
+                    inPatient.setPatientDOB(dob);
+                    inPatient.setPatientAddress(txtAddress.getText());
+                    inPatient.setPatientGender(gender);
                     
-                    int i = 0;//ps.executeUpdate();
+                    int i = inPatient.doInsert();
                     if(i != 0){
                         JOptionPane.showMessageDialog(null, "Data patient successful inputted");
 
-//                        autoid();
+                        autoid();
                         clearall();
                         tableload();
                     }else{
@@ -432,38 +456,74 @@ public class JFAdminPatient extends javax.swing.JFrame {
 
     private void tblPatientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPatientMouseClicked
         //Mouse
-        DefaultTableModel model = (DefaultTableModel)tblPatient.getModel();
-        int selectedRowIndex = tblPatient.getSelectedRow();
-        
-        txtIDP.setText(model.getValueAt(selectedRowIndex, 0).toString());
-        txtPatientName.setText(model.getValueAt(selectedRowIndex, 1).toString());
-        txtAddress.setText(model.getValueAt(selectedRowIndex, 3).toString());
-        
-        String date1 = "";
-        date1 = (model.getValueAt(selectedRowIndex, 2).toString());
-        java.util.Date date;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
-            dcDOB.setDate(date);
-        } catch (ParseException ex) {
-            System.out.println("Error: " + ex);
+        if(LoginHelper.isAdmin.equals("0")){
+            
+        }else if(LoginHelper.isAdmin.equals("1")){
+            DefaultTableModel model = (DefaultTableModel)tblPatient.getModel();
+            int selectedRowIndex = tblPatient.getSelectedRow();
+
+            txtIDP.setText(model.getValueAt(selectedRowIndex, 0).toString());
+            txtPatientName.setText(model.getValueAt(selectedRowIndex, 1).toString());
+            txtAddress.setText(model.getValueAt(selectedRowIndex, 3).toString());
+
+            String date1 = "";
+            date1 = (model.getValueAt(selectedRowIndex, 2).toString());
+            java.util.Date date;
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
+                dcDOB.setDate(date);
+            } catch (ParseException ex) {
+                System.out.println("Error: " + ex);
+            }
+
+            String gender = (model.getValueAt(selectedRowIndex, 4).toString());
+
+            if (gender.equals("Male")) {
+                rbMale.setSelected(true);
+            }else{
+                rbFemale.setSelected(true);
+            }
+
+            btnInsert.setEnabled(false);
+            btnDelete.setEnabled(true);
+            btnUpdate.setEnabled(true);
         }
-        
-        String gender = (model.getValueAt(selectedRowIndex, 4).toString());
-        
-        if (gender.equals("Male")) {
-            rbMale.setSelected(true);
-        }else{
-            rbFemale.setSelected(true);
-        }
-        
-        btnInsert.setEnabled(false);
-        btnDelete.setEnabled(true);
-        btnUpdate.setEnabled(true);
     }//GEN-LAST:event_tblPatientMouseClicked
 
     public void tableload(){
-        //load all table patient
+        tableModel = (DefaultTableModel)tblPatient.getModel();
+        tableModel.setRowCount(0);
+        String[] columnNames = {"Id Patient", "Patient Name", "DOB", "Address", "Gender"};
+        for(int i = 0; i < tblPatient.getColumnCount(); i++){
+            TableColumn column1 = tblPatient.getTableHeader().getColumnModel().getColumn(i);
+            column1.setHeaderValue(columnNames[i]);
+        }
+        try{
+            ArrayList data = inPatient.tablePatient();
+            for(int i = 0;i < data.size()-1;i+=5)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idPatient = (String)data.get(i);
+                String patientName = (String)data.get(i+1);
+                String DOB = (String)data.get(i+2);
+                String patientAddress = (String)data.get(i+3);
+                String patientGender = (String)data.get(i+4);
+                
+                String[] data_field = {idPatient.trim(), patientName.trim(),DOB.trim(), patientAddress.trim(), patientGender.trim()};
+                tableModel.addRow(data_field);
+            }
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan" + ex.getMessage());
+        }
+    }
+    
+    public void autoid(){
+        try {
+            txtIDP.setText(inPatient.autoid());
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
     }
     
     public void clearall(){

@@ -342,7 +342,7 @@
         <Component class="javax.swing.JTable" name="tblDoctor">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="6" rowCount="4">
+              <Table columnCount="6" rowCount="0">
                 <Column editable="true" title="Id Doctor" type="java.lang.Object"/>
                 <Column editable="true" title="Id Specialist" type="java.lang.Object"/>
                 <Column editable="true" title="Doctor Name" type="java.lang.Object"/>
@@ -502,7 +502,7 @@
         <Component class="javax.swing.JTable" name="tblSpecialist">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="3" rowCount="4">
+              <Table columnCount="3" rowCount="0">
                 <Column editable="true" title="Id Specialist" type="java.lang.Object"/>
                 <Column editable="true" title="Specialist" type="java.lang.Object"/>
                 <Column editable="true" title="Fare" type="java.lang.Object"/>
