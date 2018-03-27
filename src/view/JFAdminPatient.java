@@ -93,13 +93,11 @@ public class JFAdminPatient extends javax.swing.JFrame {
         lblPatientName = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblDOB = new javax.swing.JLabel();
-        cbSearch = new javax.swing.JComboBox();
         lblGender = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         lblAddress = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         txtIDP = new javax.swing.JTextField();
-        btnRefresh = new javax.swing.JButton();
         txtPatientName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -166,9 +164,6 @@ public class JFAdminPatient extends javax.swing.JFrame {
         lblDOB.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         lblDOB.setText("Date of Birth");
 
-        cbSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Patient Name", "ID Patient" }));
-
         lblGender.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         lblGender.setText("Gender");
 
@@ -186,14 +181,6 @@ public class JFAdminPatient extends javax.swing.JFrame {
         });
 
         txtIDP.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
 
         txtPatientName.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
@@ -234,19 +221,17 @@ public class JFAdminPatient extends javax.swing.JFrame {
                                     .addComponent(txtAddress)
                                     .addComponent(dcDOB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearch)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRefresh))
-                            .addComponent(jScrollPane1))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSearch)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSearch))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,10 +243,8 @@ public class JFAdminPatient extends javax.swing.JFrame {
                     .addComponent(lblIDP)
                     .addComponent(txtIDP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(btnRefresh))
+                    .addComponent(btnSearch))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -425,34 +408,32 @@ public class JFAdminPatient extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         //Search Patient
-        if(cbSearch.getSelectedItem().toString().equals("PatientName")){
-            try {
-                String name = txtSearch.getText();
-                //tblPatient.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
-        }else if(cbSearch.getSelectedItem().toString().equals("Id Patient")){
-            try {
-                //PreparedStatement ps = con.prepareStatement("select * from Patient.Patient where Id_Patient like ? order by Id_Patient ASC");
-                String id = txtSearch.getText();
-                //ps.setString(1, "%" + id + "%");
-                //tblPatient.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tableModel = (DefaultTableModel)tblPatient.getModel();
+        tableModel.setRowCount(0);
+        String[] columnNames = {"Id Patient", "Patient Name", "DOB", "Address", "Gender"};
+        for(int i = 0; i < tblPatient.getColumnCount(); i++){
+            TableColumn column1 = tblPatient.getTableHeader().getColumnModel().getColumn(i);
+            column1.setHeaderValue(columnNames[i]);
+        }
+        try{
+            ArrayList data = inPatient.getRecord(txtSearch.getText());
+            for(int i = 0;i < data.size()-1;i+=5)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idPatient = (String)data.get(i);
+                String patientName = (String)data.get(i+1);
+                String DOB = (String)data.get(i+2);
+                String patientAddress = (String)data.get(i+3);
+                String patientGender = (String)data.get(i+4);
+                
+                String[] data_field = {idPatient.trim(), patientName.trim(),DOB.trim(), patientAddress.trim(), patientGender.trim()};
+                tableModel.addRow(data_field);
             }
         }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan" + ex.getMessage());
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-        tableload();
-//        autoid();
-        clearall();
-        btnInsert.setEnabled(true);
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void tblPatientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPatientMouseClicked
         //Mouse
@@ -537,10 +518,8 @@ public class JFAdminPatient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JComboBox cbSearch;
     private com.toedter.calendar.JDateChooser dcDOB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

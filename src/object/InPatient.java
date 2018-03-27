@@ -26,7 +26,7 @@ public interface InPatient extends Remote{
     public int doUpdate() throws RemoteException;;
     public int doDelete() throws RemoteException;;
     public ArrayList tablePatient() throws RemoteException;;
-    public ArrayList getRecord() throws RemoteException;;
+    public ArrayList getRecord(String search) throws RemoteException;;
     public String[] FDPatient() throws RemoteException;;
     public String autoid() throws RemoteException;;
 }

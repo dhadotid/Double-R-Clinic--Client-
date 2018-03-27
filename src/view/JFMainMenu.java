@@ -492,8 +492,8 @@ public class JFMainMenu extends javax.swing.JFrame {
     private void btnTreatmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTreatmentActionPerformed
         //button treatment for open window form treatment and check the access level login
         if(LoginHelper.isAdmin.equals("1")){
-            JFAdminTreatment jat = new JFAdminTreatment();
-            jat.setVisible(true);
+            JFUserTreatment jfut = new JFUserTreatment();
+            jfut.setVisible(true);
         }else if(LoginHelper.isAdmin.equals("0")){
             JFUserTreatment jfut = new JFUserTreatment();
             jfut.setVisible(true);

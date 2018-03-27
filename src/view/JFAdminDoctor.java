@@ -104,15 +104,11 @@ public class JFAdminDoctor extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDoctor = new javax.swing.JTable();
         lblSearch = new javax.swing.JLabel();
-        cbSearchDoctor = new javax.swing.JComboBox();
         txtSearchDoctor = new javax.swing.JTextField();
         btnSearchDoctor = new javax.swing.JButton();
-        btnRefreshDoctor = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        cbSearchSpec = new javax.swing.JComboBox();
         txtSearchSpec = new javax.swing.JTextField();
         btnSearchSpec = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblSpecialist = new javax.swing.JTable();
 
@@ -198,9 +194,6 @@ public class JFAdminDoctor extends javax.swing.JFrame {
         lblSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         lblSearch.setText("Search");
 
-        cbSearchDoctor.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearchDoctor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DoctorName", "Id Doctor" }));
-
         txtSearchDoctor.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
         btnSearchDoctor.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
@@ -211,19 +204,8 @@ public class JFAdminDoctor extends javax.swing.JFrame {
             }
         });
 
-        btnRefreshDoctor.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefreshDoctor.setText("Refresh");
-        btnRefreshDoctor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshDoctorActionPerformed(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel2.setText("Search");
-
-        cbSearchSpec.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearchSpec.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Specialist", "Id Specialist" }));
 
         txtSearchSpec.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
@@ -232,14 +214,6 @@ public class JFAdminDoctor extends javax.swing.JFrame {
         btnSearchSpec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchSpecActionPerformed(evt);
-            }
-        });
-
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
             }
         });
 
@@ -293,63 +267,51 @@ public class JFAdminDoctor extends javax.swing.JFrame {
                                         .addComponent(rbFemale)))
                                 .addGap(8, 8, 8))))
                     .addComponent(jLabel1))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
                         .addComponent(lblSearch)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(146, 146, 146)
+                        .addComponent(txtSearchDoctor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSearchDoctor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefreshDoctor))
+                        .addGap(41, 41, 41))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbSearchSpec, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearchSpec, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearchSpec)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRefresh))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(145, 145, 145)
+                                        .addComponent(txtSearchSpec)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnSearchSpec)
+                                        .addGap(13, 13, 13))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(26, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(46, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSearch)
-                            .addComponent(txtSearchDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchDoctor)
-                            .addComponent(btnRefreshDoctor)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(jLabel1)))
+                        .addComponent(jLabel1)
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSearchDoctor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearchDoctor, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblSearch, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(186, 186, 186)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(cbSearchSpec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtSearchSpec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnSearchSpec)
-                                    .addComponent(btnRefresh)))
+                                .addComponent(txtSearchSpec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(34, 34, 34)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -364,14 +326,17 @@ public class JFAdminDoctor extends javax.swing.JFrame {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(rbMale)
                                         .addComponent(lblGender))
-                                    .addComponent(rbFemale, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(rbFemale)
+                                        .addComponent(jLabel2))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(txtDoctorName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(lblDoctorName)))
-                                .addGap(46, 46, 46)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSearchSpec)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -572,59 +537,51 @@ public class JFAdminDoctor extends javax.swing.JFrame {
 
     private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDoctorActionPerformed
         //Search Doctor
-        if(cbSearchDoctor.getSelectedItem().toString().equals("DoctorName")){
-            try {
-                //tblDoctor.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tablemodel = (DefaultTableModel)tblDoctor.getModel();
+        tablemodel.setRowCount(0);
+        try {
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = iDoctor.getRecord(txtSearchDoctor.getText());
+            for(int i = 0;i < data.size()-1;i+=6)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idDoctor = (String)data.get(i);
+                String idSpecialist = (String)data.get(i+1);
+                String doctorName = (String)data.get(i+2);
+                String doctorGender = (String)data.get(i+3);
+                String dOB = (String)data.get(i+4);
+                String phone = (String)data.get(i+5);
+                String[] data_field = {idDoctor.trim(),idSpecialist.trim(),doctorName.trim(), doctorGender.trim(), dOB.trim(), phone.trim() + ""};
+                tablemodel.addRow(data_field);
             }
-        }else if(cbSearchDoctor.getSelectedItem().toString().equals("Id Doctor")){
-            try {
-                //tblDoctor.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchDoctorActionPerformed
 
     private void btnSearchSpecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchSpecActionPerformed
         // Search Specialist
-        if(cbSearchDoctor.getSelectedItem().toString().equals("Specialist")){
-            try {
-//                tblSpecialist.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tablemodel = (DefaultTableModel)tblSpecialist.getModel();
+        tablemodel.setRowCount(0);
+        try {
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = iDoctor.getRecordSpecialist(txtSearchSpec.getText());
+            for(int i = 0;i < data.size()-1;i+=3)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idSpecialist = (String)data.get(i);
+                String specialist = (String)data.get(i+1);
+                double fare = (double)data.get(i+2);
+                
+                String[] data_field = {idSpecialist.trim(), specialist.trim(),fare + ""};
+                tablemodel.addRow(data_field);
             }
-        }else if(cbSearchDoctor.getSelectedItem().toString().equals("Id Specialist")){
-            try {
-//                tblSpecialist.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchSpecActionPerformed
-
-    private void btnRefreshDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDoctorActionPerformed
-        //Refresh
-        clearall();
-        autoid();
-        tableload();
-        tableloadspecialist();
-        btnInsert.setVisible(true);
-        btnDelete.setVisible(false);
-        btnUpdate.setVisible(false);
-    }//GEN-LAST:event_btnRefreshDoctorActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-        clearall();
-        autoid();
-        tableload();
-        tableloadspecialist();
-        btnInsert.setVisible(true);
-        btnDelete.setVisible(false);
-        btnUpdate.setVisible(false);
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     public void autoid(){
         try {
@@ -689,13 +646,9 @@ public class JFAdminDoctor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
-    private javax.swing.JButton btnRefreshDoctor;
     private javax.swing.JButton btnSearchDoctor;
     private javax.swing.JButton btnSearchSpec;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JComboBox cbSearchDoctor;
-    private javax.swing.JComboBox cbSearchSpec;
     private com.toedter.calendar.JDateChooser dcDOB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

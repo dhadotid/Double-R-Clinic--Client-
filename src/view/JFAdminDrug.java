@@ -61,11 +61,9 @@ public class JFAdminDrug extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cbSearch = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        btnRefresh = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDrug = new javax.swing.JTable();
@@ -87,9 +85,6 @@ public class JFAdminDrug extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        cbSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Drug Name", "ID Drug" }));
-
         jLabel2.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel2.setText("Drug Type");
 
@@ -103,14 +98,6 @@ public class JFAdminDrug extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel3.setText("Stock");
-
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel4.setText("ExpDate");
@@ -219,14 +206,10 @@ public class JFAdminDrug extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(lblSearch)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearch)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRefresh))
+                                .addGap(144, 144, 144)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSearch))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblDrug)
@@ -244,9 +227,7 @@ public class JFAdminDrug extends javax.swing.JFrame {
                     .addComponent(txtIDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSearch)
-                    .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(btnRefresh))
+                    .addComponent(btnSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -286,30 +267,28 @@ public class JFAdminDrug extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         //Search Drug
-        if(cbSearch.getSelectedItem().toString().equals("DrugName")){
-            try {
-                
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tableModel = (DefaultTableModel)tblDrug.getModel();
+        tableModel.setRowCount(0);
+        try {
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = inDrug.getRecord(txtSearch.getText());
+            for(int i = 0;i < data.size()-1;i+=6)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idDrug = (String)data.get(i);
+                String drugName = (String)data.get(i+1);
+                String drugType = (String)data.get(i+2);
+                int stock = (int)data.get(i+3);
+                String expDate = (String)data.get(i+4);
+                double price = (Double)data.get(i+5);
+                String[] data_field = {idDrug.trim(),drugName.trim(),drugType.trim(), stock+"", expDate.trim(), price+ ""};
+                tableModel.addRow(data_field);
             }
-        }else if(cbSearch.getSelectedItem().toString().equals("Id Drug")){
-            try {
-                
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // refresh
-        tableload();
-        autoid();
-        clearall();
-        btnInsert.setVisible(true);
-        btnDelete.setVisible(false);
-        btnUpdate.setVisible(false);
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         String exp = new SimpleDateFormat("yyyy-MM-dd").format(dcExpDate.getDate());
@@ -498,11 +477,9 @@ public class JFAdminDrug extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox cbDrugtype;
-    private javax.swing.JComboBox cbSearch;
     private com.toedter.calendar.JDateChooser dcExpDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

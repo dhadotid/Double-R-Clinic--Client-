@@ -150,7 +150,7 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbSpecialist);
 
         lblSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        lblSearch.setText("Search by Specialist");
+        lblSearch.setText("Search");
 
         txtSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 

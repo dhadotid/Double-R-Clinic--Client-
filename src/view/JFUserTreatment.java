@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import object.InPatient;
 import object.InTreatment;
 
 /**
@@ -22,6 +23,7 @@ import object.InTreatment;
  */
 public class JFUserTreatment extends javax.swing.JFrame {
     InTreatment inTreatment;
+    InPatient inPatient;
     DefaultTableModel tableModel;
     /**
      * Creates new form JFUserTreatment
@@ -38,6 +40,7 @@ public class JFUserTreatment extends javax.swing.JFrame {
         {
          Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",1097);
          inTreatment = (InTreatment) myRegistry.lookup("objtreatment");
+         inPatient = (InPatient)myRegistry.lookup("objpatient");
         } 
         catch (Exception e) 
         {
@@ -77,19 +80,15 @@ public class JFUserTreatment extends javax.swing.JFrame {
         txtDiagnose = new javax.swing.JTextField();
         btnInsert = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        cbSearchPatient = new javax.swing.JComboBox();
         txtSearchPatient = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbPatient = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         btnSearchDoc = new javax.swing.JButton();
-        cbSearchDoc = new javax.swing.JComboBox();
         txtSearchDoc = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbDoc = new javax.swing.JTable();
-        btnRefreshDoc = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -132,9 +131,6 @@ public class JFUserTreatment extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel7.setText("Search Patient");
 
-        cbSearchPatient.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearchPatient.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "PatientName", "Id Patient" }));
-
         txtSearchPatient.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
         btnSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
@@ -142,14 +138,6 @@ public class JFUserTreatment extends javax.swing.JFrame {
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
-            }
-        });
-
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
             }
         });
 
@@ -188,9 +176,6 @@ public class JFUserTreatment extends javax.swing.JFrame {
             }
         });
 
-        cbSearchDoc.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearchDoc.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Specialist", "DoctorName" }));
-
         txtSearchDoc.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
         tbDoc.setModel(new javax.swing.table.DefaultTableModel(
@@ -221,14 +206,6 @@ public class JFUserTreatment extends javax.swing.JFrame {
         if (tbDoc.getColumnModel().getColumnCount() > 0) {
             tbDoc.getColumnModel().getColumn(3).setResizable(false);
         }
-
-        btnRefreshDoc.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefreshDoc.setText("Refresh");
-        btnRefreshDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshDocActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -263,26 +240,16 @@ public class JFUserTreatment extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cbSearchPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtSearchPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(cbSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(6, 6, 6)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnSearch)
+                                        .addComponent(txtSearchPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnRefresh))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnSearchDoc)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnRefreshDoc))))
+                                        .addComponent(btnSearch))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(txtSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnSearchDoc))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
@@ -297,10 +264,8 @@ public class JFUserTreatment extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(cbSearchPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearchPatient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(btnRefresh))
+                    .addComponent(btnSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -332,12 +297,12 @@ public class JFUserTreatment extends javax.swing.JFrame {
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(cbSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchDoc)
-                            .addComponent(btnRefreshDoc))
+                            .addComponent(txtSearchDoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(btnSearchDoc)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -345,54 +310,52 @@ public class JFUserTreatment extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDocActionPerformed
-        // Search Doctor
-        if(cbSearchDoc.getSelectedItem().toString().equals("Specialist")){
-            try {
-                //tbDoc.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tableModel = (DefaultTableModel)tbDoc.getModel();
+        tableModel.setRowCount(0);
+        try{
+            ArrayList data = inTreatment.getRecordDoctor(txtSearchDoc.getText());
+            for(int i = 0;i < data.size()-1;i+=4)
+            {
+                String idDoctor = (String)data.get(i);
+                String DoctorName = (String)data.get(i+1);
+                String DoctorSpecialist = (String)data.get(i+2);
+                String DoctorGender = (String)data.get(i+3);
+
+                String[] data_field = {idDoctor.trim(), DoctorName.trim(),DoctorSpecialist.trim(), DoctorGender.trim()};
+                tableModel.addRow(data_field);
             }
-        }else if(cbSearchDoc.getSelectedItem().toString().equals("DoctorName")){
-            try {
-                //tbDoc.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchDocActionPerformed
 
-    private void btnRefreshDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDocActionPerformed
-        clear();
-        autoid();
-        autoidrecipe();
-    }//GEN-LAST:event_btnRefreshDocActionPerformed
-
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        //Search Search Doctor
-        if(cbSearchPatient.getSelectedItem().toString().equals("PatientName")){
-            try {
-                //tbPatient.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-            }
-        }else if(cbSearchPatient.getSelectedItem().toString().equals("Id Patient")){
-            try {
-                //tbPatient.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
+        tableModel = (DefaultTableModel)tbPatient.getModel();
+        tableModel.setRowCount(0);
+        String[] columnNames = {"Id Patient", "Patient Name", "DOB", "Address", "Gender"};
+        for(int i = 0; i < tbPatient.getColumnCount(); i++){
+            TableColumn column1 = tbPatient.getTableHeader().getColumnModel().getColumn(i);
+            column1.setHeaderValue(columnNames[i]);
+        }
+        try{
+            ArrayList data = inPatient.getRecord(txtSearchPatient.getText());
+            for(int i = 0;i < data.size()-1;i+=5)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idPatient = (String)data.get(i);
+                String patientName = (String)data.get(i+1);
+                String DOB = (String)data.get(i+2);
+                String patientAddress = (String)data.get(i+3);
+                String patientGender = (String)data.get(i+4);
+                
+                String[] data_field = {idPatient.trim(), patientName.trim(),DOB.trim(), patientAddress.trim(), patientGender.trim()};
+                tableModel.addRow(data_field);
             }
         }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan" + ex.getMessage());
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        txtDiagnose.setText("");
-        txtIdDoctor.setText(null);
-        txtIdPatient.setText(null);
-        txtSearchDoc.setText(null);
-        txtSearchPatient.setText(null);
-        autoid();
-        autoidrecipe();
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         //Insert
@@ -527,12 +490,8 @@ public class JFUserTreatment extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
-    private javax.swing.JButton btnRefreshDoc;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSearchDoc;
-    private javax.swing.JComboBox cbSearchDoc;
-    private javax.swing.JComboBox cbSearchPatient;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
