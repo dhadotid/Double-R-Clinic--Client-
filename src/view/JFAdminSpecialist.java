@@ -299,11 +299,9 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
         tableModel = (DefaultTableModel)tbSpecialist.getModel();
         tableModel.setRowCount(0);
         try {
-            inSpecialist.setSpcID(txtSearch.getText());
-            inSpecialist.setSpcName(txtSearch.getText());
             //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
             
-            ArrayList data = inSpecialist.getRecord();
+            ArrayList data = inSpecialist.getRecord(txtSearch.getText());
             for(int i = 0;i < data.size()-1;i+=3)
             {
                 //fac_code, fac_name, fac_email, fac_phone
