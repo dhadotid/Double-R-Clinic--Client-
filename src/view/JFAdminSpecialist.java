@@ -75,7 +75,6 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
         lblSearch = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -163,14 +162,6 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
             }
         });
 
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,8 +193,7 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
                                 .addComponent(txtSearch)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSearch)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRefresh))
+                                .addGap(104, 104, 104))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -215,8 +205,7 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSearch)
-                            .addComponent(btnSearch)
-                            .addComponent(btnRefresh))
+                            .addComponent(btnSearch))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -307,24 +296,28 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
     }//GEN-LAST:event_tbSpecialistMouseClicked
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        tableModel = (DefaultTableModel)tbSpecialist.getModel();
+        tableModel.setRowCount(0);
         try {
-            //PreparedStatement ps = con.prepareStatement("select * from Doctor.Specialist where Specialist like ? order by Specialist ASC");
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
+            inSpecialist.setSpcID(txtSearch.getText());
+            inSpecialist.setSpcName(txtSearch.getText());
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = inSpecialist.getRecord();
+            for(int i = 0;i < data.size()-1;i+=3)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idSpecialist = (String)data.get(i);
+                String specialist = (String)data.get(i+1);
+                double fare = (double)data.get(i+2);
+                
+                String[] data_field = {idSpecialist.trim(), specialist.trim(),fare + ""};
+                tableModel.addRow(data_field);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-        autoid();
-        tableload();
-        txtFare.setText("");
-        txtSpecialist.setText("");
-        btnInsert.setEnabled(true);
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
@@ -421,7 +414,6 @@ public class JFAdminSpecialist extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
