@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import object.InDrug;
 import object.InRecipe;
 
 /**
@@ -28,6 +29,7 @@ import object.InRecipe;
 public class JFUserRecipeDetail extends javax.swing.JFrame {
 
     InRecipe inRecipe;
+    InDrug inDrug;
     DefaultTableModel tableModel;
     double qty1 = 0;
     double has = 0;
@@ -50,6 +52,7 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
         {
          Registry myRegistry = LocateRegistry.getRegistry("127.0.0.1",1097);
          inRecipe = (InRecipe) myRegistry.lookup("objrecipe");
+         inDrug = (InDrug) myRegistry.lookup("objdrug");
         } 
         catch (Exception e) 
         {
@@ -106,9 +109,6 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
         tbDrugRecipe = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
         tbRecipe = new javax.swing.JTable();
-        jLabel10 = new javax.swing.JLabel();
-        txtSearchDrugRecipe = new javax.swing.JTextField();
-        btnSearchDrugRecipe = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -247,19 +247,6 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tbRecipe);
 
-        jLabel10.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        jLabel10.setText("Search Drug Recipe");
-
-        txtSearchDrugRecipe.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-
-        btnSearchDrugRecipe.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnSearchDrugRecipe.setText("Search");
-        btnSearchDrugRecipe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchDrugRecipeActionPerformed(evt);
-            }
-        });
-
         btnSave.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -312,12 +299,7 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
                         .addComponent(txtSearchRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSearchRecipe)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSearchDrugRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSearchDrugRecipe))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,7 +311,7 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
                                 .addComponent(btnSearch))
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -343,10 +325,7 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(txtSearchRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchRecipe)
-                            .addComponent(jLabel10)
-                            .addComponent(txtSearchDrugRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearchDrugRecipe))
+                            .addComponent(btnSearchRecipe))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,6 +387,27 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         //Search Drug
+        tableModel = (DefaultTableModel)tbDrug.getModel();
+        tableModel.setRowCount(0);
+        try {
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = inDrug.getRecord(txtSearch.getText());
+            for(int i = 0;i < data.size()-1;i+=6)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idDrug = (String)data.get(i);
+                String drugName = (String)data.get(i+1);
+                String drugType = (String)data.get(i+2);
+                int stock = (int)data.get(i+3);
+                String expDate = (String)data.get(i+4);
+                double price = (Double)data.get(i+5);
+                String[] data_field = {idDrug.trim(),drugName.trim(),drugType.trim(), stock+"", expDate.trim(), price+ ""};
+                tableModel.addRow(data_field);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
@@ -479,13 +479,28 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
 
     private void btnSearchRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchRecipeActionPerformed
         // TODO add your handling code here:
+        tableModel = (DefaultTableModel)tbRecipe.getModel();
+        tableModel.setRowCount(0);
+        try {
+            //inSpecialist.setSpcFare(Double.parseDouble(txtSearch.getText()));
+            
+            ArrayList data = inRecipe.getRecord(txtSearchRecipe.getText());
+            for(int i = 0;i < data.size()-1;i+=3)
+            {
+                //fac_code, fac_name, fac_email, fac_phone
+                String idRecipe = (String)data.get(i);
+                String patientName = (String)data.get(i+1);
+                String diagnose = (String)data.get(i+2);
+                String[] data_field = {idRecipe.trim(),patientName.trim(),diagnose.trim()};
+                tableModel.addRow(data_field);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
+        }
     }//GEN-LAST:event_btnSearchRecipeActionPerformed
 
-    private void btnSearchDrugRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDrugRecipeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchDrugRecipeActionPerformed
-
     private void tbRecipeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbRecipeMouseClicked
+
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)tbRecipe.getModel();
         int selectedRowIndex = tbRecipe.getSelectedRow();
@@ -658,10 +673,8 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnSearchDrugRecipe;
     private javax.swing.JButton btnSearchRecipe;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -682,7 +695,6 @@ public class JFUserRecipeDetail extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdRecipeDetail;
     private javax.swing.JTextField txtQty;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtSearchDrugRecipe;
     private javax.swing.JTextField txtSearchRecipe;
     private javax.swing.JTextField txtSub;
     // End of variables declaration//GEN-END:variables

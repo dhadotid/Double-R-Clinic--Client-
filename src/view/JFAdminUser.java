@@ -61,10 +61,8 @@ public class JFAdminUser extends javax.swing.JFrame {
 
         txtPassword = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
-        cbSearch = new javax.swing.JComboBox();
         txtSearch = new javax.swing.JTextField();
         lblAccessLogin = new javax.swing.JLabel();
-        btnRefresh = new javax.swing.JButton();
         lblIDU = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         lblUsername = new javax.swing.JLabel();
@@ -86,21 +84,10 @@ public class JFAdminUser extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel1.setText("Search");
 
-        cbSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Username ", "ID User" }));
-
         txtSearch.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
 
         lblAccessLogin.setFont(new java.awt.Font("Californian FB", 1, 36)); // NOI18N
         lblAccessLogin.setText("User");
-
-        btnRefresh.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
-        btnRefresh.setText("Refresh");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
 
         lblIDU.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         lblIDU.setText("ID User");
@@ -186,18 +173,15 @@ public class JFAdminUser extends javax.swing.JFrame {
                 .addComponent(lblAccessLogin)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(347, Short.MAX_VALUE)
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(150, 150, 150)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSearch)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh))
+                        .addGap(9, 9, 9))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,9 +227,7 @@ public class JFAdminUser extends javax.swing.JFrame {
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRefresh)
                             .addComponent(btnSearch))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -281,23 +263,30 @@ public class JFAdminUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
-        autoid();
-        tableload();
-        txtUsername.setText("");
-        txtPassword.setText("");
-        btnInsert.setEnabled(true);
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
+        tableModel = (DefaultTableModel)tblAL.getModel();
+        tableModel.setRowCount(0);
         try {
-            
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
+            ArrayList data = inLogin.getRecord(txtSearch.getText());
+            for(int i = 0;i < data.size()-1;i+=4)
+            {
+                String level = "";
+                String idUser = (String)data.get(i);
+                String username = (String)data.get(i+1);
+                String password = (String)data.get(i+2);
+                String isAdmin = (String)data.get(i+3);
+                if(isAdmin.equals("1")){
+                    level = "Admin";
+                }else{
+                    level = "User";
+                }
+
+                String[] data_field = {idUser.trim(), username.trim(),password.trim(),level};
+                tableModel.addRow(data_field);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -474,11 +463,9 @@ public class JFAdminUser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox cbLevel;
-    private javax.swing.JComboBox cbSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
